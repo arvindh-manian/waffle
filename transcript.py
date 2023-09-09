@@ -1,16 +1,22 @@
 from pytube import YouTube
-import pandas as pd
 from gradio_client import Client
 
+def transcribe_video(video_url):
+    # Download audio from the given video URL
+    audio_file = YouTube(video_url).streams.filter(only_audio=True).first().download(filename="audio.mp4")
 
-video_url = "https://www.youtube.com/watch?v=QTMhuD0XEcY" 
-audio_file = YouTube(video_url).streams.filter(only_audio=True).first().download(filename="audio.mp4")
+    # Initialize Gradio Client
+    client = Client("https://sanchit-gandhi-whisper-jax.hf.space/")
 
-client = Client("https://sanchit-gandhi-whisper-jax.hf.space/")
-result = client.predict(
-				"audio.mp4",	# str (filepath or URL to file) in 'inputs' Audio component
-				"transcribe",	# str in 'Task' Radio component
-				False,	# bool in 'Return timestamps' Checkbox component
-				api_name="/predict"
-)
-str_res = result[0]
+    # Predict transcription using Gradio Client
+    result = client.predict(
+        "audio.mp4",    # str (filepath or URL to file) in 'inputs' Audio component
+        "transcribe",    # str in 'Task' Radio component
+        False,           # bool in 'Return timestamps' Checkbox component
+        api_name="/predict"
+    )
+
+    # Extract the transcription from the result
+    str_res = result[0]
+    
+    return str_res
