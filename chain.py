@@ -2,12 +2,17 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.chains import AnalyzeDocumentChain
 from langchain.document_loaders import UnstructuredMarkdownLoader
 from langchain.chains.question_answering import load_qa_chain
+from langchain import OpenAI
 from typing import List, Union
 
-def get_content(filepath: str) -> UnstructuredMarkdownLoader:
-  loader = UnstructuredMarkdownLoader(filepath)
-  f = loader.load()
-  return "\n".join([p.page_content for p in f])
+def ask(url: Union[List[str], str], question: str) -> str:
+    content = get_content(url)
+    chain = get_qna_chain(OpenAI)
+    return chain.run(input_document=content, question=question)
+
+def get_content(filepath: str) -> str:
+    with open(filepath, "r") as f:
+        return f.read()
 
 def get_combine_prompt() -> PromptTemplate:
     combine_prompt_template = """Given the following extracted parts of a video transcript and a question, determine the language of the question & create a final answer in the language the question was asked in. 

@@ -8,15 +8,11 @@ import dotenv
 
 app = FastAPI()
 
-
-
 dotenv.load_dotenv()
 
-def transcribe(vidurl: str) -> str:
-    return transcribe_video(vidurl)
 
-def ask(url: Union[List[str], str], question: str) -> str:
-    content = get_content(url)
+@app.get('/transcribe/')
+def get_answer(url: str, question: str):
+    transcription = transcribe_video(url)
     chain = get_qna_chain(OpenAI)
-    return chain.run(input_document=content, question=question)
-
+    return chain.run(input_document=transcription, question=question)
