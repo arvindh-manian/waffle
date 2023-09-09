@@ -5,10 +5,6 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain import OpenAI
 from typing import List, Union
 
-def ask(url: Union[List[str], str], question: str) -> str:
-    content = get_content(url)
-    chain = get_qna_chain(OpenAI)
-    return chain.run(input_document=content, question=question)
 
 def get_content(filepath: str) -> str:
     with open(filepath, "r") as f:
@@ -64,4 +60,5 @@ def get_qna_chain(llm) -> AnalyzeDocumentChain:
     qa_chain = load_qa_chain(
         llm, chain_type="map_reduce", combine_prompt=get_combine_prompt()
     )
+
     return AnalyzeDocumentChain(combine_docs_chain=qa_chain)
