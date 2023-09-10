@@ -7,11 +7,13 @@ from langchain.docstore.document import Document
 from typing import List, Union
 
 
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
 def get_text_chunks_langchain(text):
-   text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-   docs = [Document(page_content=x) for x in text_splitter.split_text(text)]
-   return docs
+   text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=50)
+   chunks = text_splitter.create_documents([text])
+
+   return chunks
 
 def get_content(filepath: str) -> str:
     with open(filepath, "r") as f:
@@ -52,7 +54,7 @@ def get_combine_prompt() -> PromptTemplate:
     )
     
 def get_summary_chain(llm) -> AnalyzeDocumentChain:
-    return load_summarize_chain(llm, chain_type="stuff")
+    return load_summarize_chain(llm, chain_type="map_reduce", verbose=False)
 
 def get_qna_chain(llm) -> AnalyzeDocumentChain:
     qa_chain = load_qa_chain(

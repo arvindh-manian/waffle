@@ -6,6 +6,8 @@ from fastapi import FastAPI
 from metaphor import find_links_for_question
 import dotenv
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
 
 class TranscriptionRequest(BaseModel):
     transcription: str
@@ -14,6 +16,16 @@ class TranscriptionRequest(BaseModel):
 
 dotenv.load_dotenv()
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_headers=["*"],
+)
+
 
 
 @app.get('/')
