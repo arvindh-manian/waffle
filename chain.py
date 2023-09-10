@@ -21,7 +21,6 @@ def get_content(filepath: str) -> str:
 
 def get_combine_prompt() -> PromptTemplate:
     combine_prompt_template = """Given the following extracted parts of a video transcript and a question, generate an answer to the question based on information in the transcript. 
-    If you don't know the answer, just say that you don't know. Don't try to make up an answer.
 
     QUESTION: Which state/country's law governs the interpretation of the contract?
     =========
