@@ -1,7 +1,6 @@
 from typing import Union, List
-from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain, get_retrieval_qna_chain
+from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain
 from langchain import OpenAI
-from langchain.embeddings import OpenAIEmbeddings
 from transcript import transcribe_video
 from fastapi import FastAPI
 #from metaphor import find_links_for_question
@@ -18,7 +17,7 @@ class TranscriptionRequest(BaseModel):
 dotenv.load_dotenv()
 app = FastAPI()
 
-origins = ["https://waffle-five.vercel.app"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -52,10 +51,9 @@ def get_answer(url: str):
 
 @app.post("/ask/")
 def get_answer(request: TranscriptionRequest):
-    docs = get_text_chunks_langchain(request.transcription)
-    chain = get_retrieval_qna_chain(OpenAI(), docs, OpenAIEmbeddings())
+    chain = get_qna_chain(OpenAI())
     
-    answer = chain.run(request.question)
+    answer = chain.run(input_document=request.transcription, question=request.question)
     
     return {
         "answer": answer

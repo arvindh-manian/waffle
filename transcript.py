@@ -8,8 +8,7 @@ def transcribe_video(video_url):
     yt_id = extract.video_id(video_url)
     if YouTubeTranscriptApi.list_transcripts(yt_id).find_transcript(['en']):
         return "\n".join([i['text'] for i in YouTubeTranscriptApi.get_transcript(yt_id)])
-    
-    
+
     audio_file = YouTube(video_url).streams.filter(only_audio=True).first().download(filename="audio.mp4")
 
     # Initialize Gradio Client
