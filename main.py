@@ -17,7 +17,7 @@ class TranscriptionRequest(BaseModel):
 dotenv.load_dotenv()
 app = FastAPI()
 
-origins = ["*"]
+origins = ["https://waffle-five.vercel.app"]
 
 app.add_middleware(
     CORSMiddleware,
