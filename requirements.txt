@@ -48,3 +48,5 @@ openai
 metaphor_python
 gunicorn
 tiktoken
+chromadb
+youtube-transcript-api
