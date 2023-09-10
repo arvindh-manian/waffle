@@ -3,7 +3,7 @@ from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain, g
 from langchain import OpenAI
 from transcript import transcribe_video
 from fastapi import FastAPI
-from metaphor import find_links_for_question
+#from metaphor import find_links_for_question
 import dotenv
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
