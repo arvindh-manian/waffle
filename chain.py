@@ -5,7 +5,8 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.docstore.document import Document
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.indexes import VectorstoreIndexCreator
-from langchain.vectorstores import Chroma
+import faiss
+# from langchain.vectorstores import Chroma
 
 from typing import List, Union
 
@@ -66,10 +67,22 @@ def get_qna_chain(llm) -> AnalyzeDocumentChain:
 
     return AnalyzeDocumentChain(combine_docs_chain=qa_chain)
 
+"""
 def get_retrieval_qna_chain(llm, docs) -> RetrievalQA:
     embeddings = OpenAIEmbeddings()
     docsearch = Chroma.from_documents(docs, embeddings)
     
     qa = RetrievalQA.from_chain_type(llm, chain_type="stuff", retriever=docsearch.as_retriever())
     
+    return qa
+"""
+
+def create_faiss_index(embeddings):
+    index = faiss.IndexFlatL2(embeddings.shape[1])
+    index.add(embeddings)
+    return index
+
+def get_retrieval_qna_chain(llm, docs, embeddings):
+    index = create_faiss_index(embeddings)
+    qa = RetrievalQA.from_chain_type(llm, chain_type="stuff", retriever=index)
     return qa
