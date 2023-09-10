@@ -13,7 +13,7 @@ from typing import List, Union
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def get_text_chunks_langchain(text):
-   text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=50)
+   text_splitter = RecursiveCharacterTextSplitter(chunk_size=3300, chunk_overlap=50)
    chunks = text_splitter.create_documents([text])
 
    return chunks
