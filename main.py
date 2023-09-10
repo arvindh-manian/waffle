@@ -1,5 +1,5 @@
 from typing import Union, List
-from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain
+from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain, get_retrieval_qna_chain
 from langchain import OpenAI
 from transcript import transcribe_video
 from fastapi import FastAPI
@@ -51,9 +51,10 @@ def get_answer(url: str):
 
 @app.post("/ask/")
 def get_answer(request: TranscriptionRequest):
-    chain = get_qna_chain(OpenAI())
+    docs = get_text_chunks_langchain(request.transcription)
+    chain = get_retrieval_qna_chain(OpenAI(), docs)
     
-    answer = chain.run(input_document=request.transcription, question=request.question)
+    answer = chain.run(request.question)
     
     return {
         "answer": answer

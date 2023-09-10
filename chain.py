@@ -1,8 +1,11 @@
 from langchain.prompts.prompt import PromptTemplate
-from langchain.chains import AnalyzeDocumentChain
+from langchain.chains import AnalyzeDocumentChain, RetrievalQA
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains.summarize import load_summarize_chain
 from langchain.docstore.document import Document
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.indexes import VectorstoreIndexCreator
+from langchain.vectorstores import Chroma
 
 from typing import List, Union
 
@@ -62,3 +65,11 @@ def get_qna_chain(llm) -> AnalyzeDocumentChain:
     )
 
     return AnalyzeDocumentChain(combine_docs_chain=qa_chain)
+
+def get_retrieval_qna_chain(llm, docs) -> RetrievalQA:
+    embeddings = OpenAIEmbeddings()
+    docsearch = Chroma.from_documents(docs, embeddings)
+    
+    qa = RetrievalQA.from_chain_type(llm, chain_type="stuff", retriever=docsearch.as_retriever())
+    
+    return qa
