@@ -40,12 +40,12 @@ def get_answer(url: str):
     chain = get_summary_chain(OpenAI())
     
     summary = chain.run(get_text_chunks_langchain(transcription))
-    links = find_links_for_question(summary)
+    #links = find_links_for_question(summary)
 
     return {
         "transcript": transcription,
         "summary": summary,
-        "links": links
+        #"links": links
     }
     
 
