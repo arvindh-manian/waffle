@@ -3,6 +3,7 @@ from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain
 from langchain import OpenAI
 from transcript import transcribe_video
 from fastapi import FastAPI
+from metaphor import find_links_for_question
 import dotenv
 from pydantic import BaseModel
 
@@ -20,16 +21,20 @@ def root():
     return "Hello World"
 
 @app.get("/transcribe_and_summarize/")
-def get_answer(url: str, question: str):
+def get_answer(url: str):
     transcription = transcribe_video(url)
 
     chain = get_summary_chain(OpenAI())
     
     summary = chain.run(get_text_chunks_langchain(transcription))
+    links = find_links_for_question(summary)
+
     return {
         "transcript": transcription,
-        "summary": summary
+        "summary": summary,
+        "links": links
     }
+    
 
 @app.post("/ask/")
 def get_answer(request: TranscriptionRequest):

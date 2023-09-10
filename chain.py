@@ -2,7 +2,7 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.chains import AnalyzeDocumentChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains.summarize import load_summarize_chain
-from langchain.schema.document import Document
+from langchain.docstore.document import Document
 
 from typing import List, Union
 
