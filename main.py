@@ -3,7 +3,7 @@ from chain import get_qna_chain, get_summary_chain, get_text_chunks_langchain
 from langchain import OpenAI
 from transcript import transcribe_video
 from fastapi import FastAPI
-#from metaphor import find_links_for_question
+from metaphor import find_links_for_question
 import dotenv
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,12 +40,12 @@ def get_answer(url: str):
     chain = get_summary_chain(OpenAI())
     
     summary = chain.run(get_text_chunks_langchain(transcription))
-    #links = find_links_for_question(summary)
+    links = find_links_for_question(summary)
 
     return {
         "transcript": transcription,
         "summary": summary,
-        #"links": links
+        "links": links
     }
     
 

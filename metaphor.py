@@ -3,7 +3,7 @@ import metaphor_python
 import os
 
 # Initialize the Metaphor API client with your API key
-metaphor_client = metaphor_python.Metaphor(api_key="7fa74020-26e8-4ca9-b0ff-2640cec4954f")
+metaphor_client = metaphor_python.Metaphor(api_key="536446c2-3819-46ad-891e-21ff1d67ccf3")
 
 def find_links_for_question(summary):
     search_response = metaphor_client.search("Here is a paragraph of information:" + summary + "Here are some related links:", num_results=3)
